@@ -1,0 +1,12 @@
+packages:
+  ./ircbridge-types/*.cabal
+  ./ircbridge-aeson/*.cabal
+  ./ircbridge-amqp/*.cabal
+  ./ircbridge-cereal/*.cabal
+  ./ircbridge-ircbot/*.cabal
+  ./ircbridge-ircbot-amqp/*.cabal
+  ./ircbridge-ircbot-multi/*.cabal
+  ./ircbridge-ircbot-zre/*.cabal
+  ./ircbridge-pretty/*.cabal
+  ./ircbridge-zre/*.cabal
+  ./ircbridge-zre-util/*.cabal

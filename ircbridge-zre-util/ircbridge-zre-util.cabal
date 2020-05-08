@@ -1,0 +1,64 @@
+name:                ircbridge-zre-util
+version:             0.1.0.0
+synopsis:            ircbridge-zre utils and executables
+description:         Pretty print IRCOutput to terminal
+homepage:            https://github.com/sorki/ircbridge
+license:             BSD3
+author:              Richard Marko
+maintainer:          srk@48.io
+copyright:           2020 Richard Marko
+category:            Networking
+build-type:          Simple
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     Network.IRC.Bridge.ZRE.Util
+  build-depends:       base >= 4.7 && < 5
+                     , bytestring
+                     , containers
+                     , text
+                     , time
+                     , stm
+                     , pretty-simple
+                     , ircbridge-pretty
+                     , ircbridge-types
+                     , ircbridge-zre
+                     , zre
+  default-language:    Haskell2010
+
+executable ircbridge-zre-pretty
+  hs-source-dirs:      .
+  main-is:             Pretty.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , ircbridge-zre-util
+  default-language:    Haskell2010
+
+executable ircbridge-zre-echo
+  hs-source-dirs:      .
+  main-is:             Echo.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , ircbridge-zre-util
+  default-language:    Haskell2010
+
+executable ircbridge-zre-cat
+  hs-source-dirs:      .
+  main-is:             Cat.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , ircbridge-types
+                     , ircbridge-cereal
+                     , ircbridge-zre-util
+                     , optparse-applicative
+                     , text
+                     , time
+                     , zre
+  default-language:    Haskell2010
+
+
+
+source-repository head
+  type:     git
+  location: https://github.com/sorki/ircbridge

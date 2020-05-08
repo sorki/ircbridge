@@ -1,0 +1,28 @@
+name:                ircbridge-ircbot
+version:             0.1.0.0
+synopsis:            ircbot integration utils
+description:         Encoding and decoding of IRC to STM channels
+homepage:            https://github.com/sorki/ircbridge
+license:             BSD3
+author:              Richard Marko
+maintainer:          srk@48.io
+copyright:           2020 Richard Marko
+category:            Networking
+build-type:          Simple
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     Network.IRC.Bridge.IRC.Bot
+  build-depends:       base >= 4.7 && < 5
+                     , bytestring
+                     , text
+                     , time
+                     , stm
+                     , ircbot
+                     , ircbridge-types
+  default-language:    Haskell2010
+
+source-repository head
+  type:     git
+  location: https://github.com/sorki/ircbridge

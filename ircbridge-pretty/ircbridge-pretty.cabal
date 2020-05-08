@@ -1,0 +1,27 @@
+name:                ircbridge-pretty
+version:             0.1.0.0
+synopsis:            IRC bridge prettyprinter
+description:         Pretty printing for core ircbridge types
+homepage:            https://github.com/sorki/ircbridge
+license:             BSD3
+author:              Richard Marko
+maintainer:          srk@48.io
+copyright:           2020 Richard Marko
+category:            Networking
+build-type:          Simple
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     Network.IRC.Bridge.Pretty
+  build-depends:       base >= 4.7 && < 5
+                     , text
+                     , time
+                     , ircbridge-types
+                     , prettyprinter
+                     , prettyprinter-ansi-terminal
+  default-language:    Haskell2010
+
+source-repository head
+  type:     git
+  location: https://github.com/sorki/ircbridge

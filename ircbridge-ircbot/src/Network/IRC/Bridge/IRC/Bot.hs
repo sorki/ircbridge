@@ -8,6 +8,7 @@ module Network.IRC.Bridge.IRC.Bot (
   , decode
   ) where
 
+import Control.Monad
 import Control.Monad.IO.Class (liftIO)
 import Control.Concurrent.STM
 import Data.ByteString (ByteString)
@@ -30,7 +31,7 @@ stmPart :: (BotMonad m)
          => ByteString
          -> TChan IRCOutput
          -> m ()
-stmPart partName chan = do
+stmPart partName chan = forever $ do
   evt@IRCOutput{..} <- liftIO $ atomically $ readTChan chan
   logM Debug $ partName <> "StmPart: got" <> (B.pack $ show evt)
   if outputIsNotice then sendCommand $ Notice  Nothing [toTarget outputTo] $ encode outputBody

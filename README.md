@@ -2,7 +2,6 @@
 
 Bidirectional IRC bridging.
 
-
 # AMQP testing
 
 Use `konsum` from amqp-utils
@@ -11,9 +10,9 @@ konsum -x ircExchange -r irc.amqp
 
 # ZRE testing
 
-ircbridge-zre-pretty
+`ircbridge-zre-pretty`
 
 or
 
-zrecat ircInput
-zrecat ircOutput
+`zrecat ircInput`
+`zrecat ircOutput`

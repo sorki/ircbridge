@@ -54,7 +54,7 @@ in
 
         realname = mkOption {
           type = types.str;
-          default = "ircbridge demo";
+          default = "https://github.com/sorki/ircbridge";
           description = "ircbridge IRC realname";
         };
 

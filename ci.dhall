@@ -9,8 +9,8 @@ in  haskellCi.generalCi
              =
               defSteps.extraSteps.pre
             # [ haskellCi.BuildStep.Name
-                  { name = "Install zeromq3-dev"
-                  , run = "sudo apt install zeromq3-dev"
+                  { name = "Install libzrmq3-dev"
+                  , run = "sudo apt install libzmq3-dev"
                   }
               ]
       )

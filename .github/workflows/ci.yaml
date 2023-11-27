@@ -4,8 +4,8 @@ jobs:
     name: "GHC ${{ matrix.ghc }}, Cabal ${{ matrix.cabal }}, OS ${{ matrix.os }}"
     "runs-on": "${{ matrix.os }}"
     steps:
-    - name: "Install zeromq3-dev"
-      run: "sudo apt install zeromq3-dev"
+    - name: "Install libzrmq3-dev"
+      run: "sudo apt install libzmq3-dev"
     - uses: "actions/checkout@v4"
       with:
         submodules: recursive

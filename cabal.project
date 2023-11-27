@@ -2,6 +2,7 @@ packages:
   ./ircbridge-types/*.cabal
   ./ircbridge-aeson/*.cabal
   ./ircbridge-amqp/*.cabal
+  ./ircbridge-amqp-util/*.cabal
   ./ircbridge-cereal/*.cabal
   ./ircbridge-ircbot/*.cabal
   ./ircbridge-ircbot-amqp/*.cabal

@@ -7,6 +7,7 @@ let
     "ircbridge-types"
     "ircbridge-aeson"
     "ircbridge-amqp"
+    "ircbridge-amqp-util"
     "ircbridge-cereal"
     "ircbridge-ircbot"
     "ircbridge-ircbot-amqp"

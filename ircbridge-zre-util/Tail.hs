@@ -1,9 +1,8 @@
 module Main where
 
+import Options.Applicative
 import Network.IRC.Bridge.Options
 import Network.IRC.Bridge.ZRE.Util
-
-import Options.Applicative
 
 main :: IO ()
 main = execParser opts >>= prettyIRCInputFromZRE

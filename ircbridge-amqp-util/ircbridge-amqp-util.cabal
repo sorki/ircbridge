@@ -1,0 +1,56 @@
+name:                ircbridge-amqp-util
+version:             0.1.0.0
+synopsis:            ircbridge-amqp utils and executables
+description:         Pretty print IRCOutput to terminal or send IRC messages via AMQP
+homepage:            https://github.com/sorki/ircbridge
+license:             BSD3
+author:              Richard Marko
+maintainer:          srk@48.io
+copyright:           2023 Richard Marko
+category:            Networking
+build-type:          Simple
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  ghc-options:         -Wall
+  exposed-modules:     Network.IRC.Bridge.AMQP.Util
+  build-depends:       base >= 4.7 && < 5
+                     , bytestring
+                     , containers
+                     , text
+                     , time
+                     , stm
+                     , ircbridge-amqp
+                     , ircbridge-pretty
+                     , ircbridge-types
+  default-language:    Haskell2010
+
+executable ircbridge-amqp-tail
+  hs-source-dirs:      .
+  main-is:             Tail.hs
+  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , ircbridge-optparse
+                     , ircbridge-amqp-util
+                     , optparse-applicative
+  default-language:    Haskell2010
+
+executable ircbridge-amqp-cat
+  hs-source-dirs:      .
+  main-is:             Cat.hs
+  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , ircbridge-amqp
+                     , ircbridge-optparse
+                     , ircbridge-types
+                     , optparse-applicative
+                     , text
+                     , time
+  default-language:    Haskell2010
+
+
+
+source-repository head
+  type:     git
+  location: https://github.com/sorki/ircbridge

@@ -4,8 +4,12 @@
 module Network.IRC.Bridge.AMQP (
     amqpRun
   , amqpRunWith
+  , amqpRunTail
+  , amqpRunTailWith
   , defaultAMQPConfig
   , AMQPConfig(..)
+  , publishIRCOutputWith
+  , publishIRCOutput
   ) where
 
 import Control.Monad (forever, void)
@@ -76,10 +80,10 @@ amqpRunWith AMQPConfig{..} = do
   -- IRC -> AMQP
 
   chanFrom <- openChannel conn
-  (qf, _, _) <- declareQueue chan newQueue {
+  (qf, _, _) <- declareQueue chanFrom newQueue {
       queueName = cfgQueueName
     }
-  declareExchange chan newExchange {
+  declareExchange chanFrom newExchange {
       exchangeName = cfgExchangeName
     , exchangeType = cfgExchangeType
     }
@@ -118,3 +122,80 @@ amqpCallback chan (msg, env) = do
       Nothing -> error $
         "Unable to decode AMQP message to IRCOutput, message was"
         ++ show msg
+
+-- | Connect to AMQP and forward messages from IRC
+amqpRunTail :: IO (TChan IRCInput)
+amqpRunTail = amqpRunTailWith defaultAMQPConfig
+
+-- | Connect to AMQP and forward messages from IRC
+-- Accepts `AMQPConfig`.
+amqpRunTailWith :: AMQPConfig -> IO (TChan IRCInput)
+amqpRunTailWith AMQPConfig{..} = do
+  conn <- openConnection cfgHostName cfgVirtualHost cfgLoginName cfgLoginPass
+
+  chan <- openChannel conn
+  (q, _, _) <- declareQueue chan newQueue {
+      queueName = cfgQueueName
+    }
+  declareExchange chan newExchange {
+      exchangeName = cfgExchangeName
+    , exchangeType = cfgExchangeType
+    }
+
+  bindQueue chan q cfgExchangeName cfgRoutingKeyFrom
+
+  tChan <- newTChanIO
+  _ <- consumeMsgs chan q Ack (amqpTailCallback tChan)
+
+  void $ forkIO $ do
+    X.catch
+      (forever $ threadDelay 5000000)
+      (\e -> putStrLn ("amqp exception" ++ show (e :: X.SomeException)))
+    closeConnection conn
+
+  return tChan
+
+-- | Forward messages from AMQP to TChan consumed by `amqpPart`.
+amqpTailCallback
+  :: TChan IRCInput
+  -> (Message, Envelope)
+  -> IO ()
+amqpTailCallback chan (msg, env) = do
+    case amqpDecodeIRCInput msg of
+      Just ircIn -> do
+        liftIO $ atomically $ writeTChan chan ircIn
+        -- acknowledge receiving the message
+        ackEnv env
+
+      Nothing -> error $
+        "Unable to decode AMQP message to IRCInput, message was"
+        ++ show msg
+
+-- | Connect to AMQP and send a single IRC message
+publishIRCOutput :: IRCOutput -> IO ()
+publishIRCOutput = publishIRCOutputWith defaultAMQPConfig
+
+-- | Connect to AMQP and send a single IRC message
+-- Accepts `AMQPConfig`.
+publishIRCOutputWith :: AMQPConfig -> IRCOutput -> IO ()
+publishIRCOutputWith AMQPConfig{..} ircOutput = do
+  conn <- openConnection cfgHostName cfgVirtualHost cfgLoginName cfgLoginPass
+
+  chan <- openChannel conn
+  (qf, _, _) <- declareQueue chan newQueue {
+      queueName = cfgQueueName
+    }
+  declareExchange chan newExchange {
+      exchangeName = cfgExchangeName
+    , exchangeType = cfgExchangeType
+    }
+
+  bindQueue chan qf cfgExchangeName cfgRoutingKey
+
+  _mi <- publishMsg
+    chan
+    cfgExchangeName
+    cfgRoutingKey
+    (amqpEncodeIRCOutput ircOutput)
+
+  closeConnection conn

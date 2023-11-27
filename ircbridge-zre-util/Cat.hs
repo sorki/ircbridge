@@ -35,10 +35,5 @@ g = mkGroup "ircInput"
 
 main = runZreParse parseCatOptions $ \CatOpts{..} -> do
   zjoin g
-  now <- liftIO $ Data.Time.Clock.getCurrentTime
-  zshout g $ encodeIRCOutput $ IRCOutput
-    { outputTo = catTarget
-    , outputBody = catBody
-    , outputTime = now
-    , outputIsNotice = catNotice
-    }
+  liftIO (mkIRCOutput catTarget catBody catNotice)
+  >>= zshout g . encodeIRCOutput

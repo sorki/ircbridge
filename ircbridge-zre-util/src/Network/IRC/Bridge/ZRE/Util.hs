@@ -73,14 +73,3 @@ echoMap = do
   print "wot"
   runZre $ mapToGroup @"ircOutput" @"ircInput" echoInToOut
   --runZre $ mapToGroup @"ircOutput" @"ircDbg" @IRCInput @String show
-{--
--- to utils
-mkIRCOutput to body isNotice = do
-  now <- Data.Time.Clock.getCurrentTime
-  return $ IRCOutput
-  { outputTo = to
-  , outputBody = body
-  , outputTime = now
-  , outputIsNotice = isNotice
-  }
---}

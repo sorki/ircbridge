@@ -4,12 +4,18 @@ module Network.IRC.Bridge.Types (
     IRCTarget(..)
   , IRCInput(..)
   , IRCOutput(..)
+  -- * Util
+  , forUser
+  , forChannel
+  , mkIRCOutput
   ) where
 
 import Data.Text (Text)
 import Data.Time.Clock (UTCTime)
 import Data.Typeable (Typeable)
 import GHC.Generics
+
+import qualified Data.Time.Clock
 
 data IRCTarget = IRCUser Text | IRCChannel Text
   deriving (Eq, Show, Ord, Typeable, Generic)
@@ -31,3 +37,25 @@ data IRCOutput = IRCOutput {
   , outputIsNotice :: Bool          -- ^ Send a message as notice instead of default privmsg
   , outputTime     :: UTCTime       -- ^ Time when the message was created
   } deriving (Eq, Show, Ord, Typeable, Generic)
+
+-- * Util
+
+forUser :: Text -> IRCTarget
+forUser = IRCUser
+
+forChannel :: Text -> IRCTarget
+forChannel = IRCChannel
+
+mkIRCOutput
+  :: IRCTarget
+  -> Text
+  -> Bool -- ^ Send a message as notice instead of default privmsg
+  -> IO IRCOutput
+mkIRCOutput to body isNotice = do
+  now <- Data.Time.Clock.getCurrentTime
+  pure $ IRCOutput
+    { outputTo = to
+    , outputBody = body
+    , outputTime = now
+    , outputIsNotice = isNotice
+    }

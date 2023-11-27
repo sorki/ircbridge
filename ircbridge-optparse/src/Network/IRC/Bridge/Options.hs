@@ -34,15 +34,15 @@ parseCatOptions = CatOpts
   <*> switch (long "notice" <> short 'n')
 
 data TailOpts = TailOpts {
-    tailTarget     :: IRCTarget
-  , tailOutputMode :: OutputMode
+    tailTarget     :: Maybe IRCTarget
+  , tailOutputMode :: Maybe OutputMode
   , tailOneShot    :: Bool -- ^ Exit after outputting a message
   } deriving (Eq, Show, Ord)
 
 parseTailOptions :: Parser TailOpts
 parseTailOptions = TailOpts
-  <$> parseTarget
-  <*> parseOutputMode
+  <$> optional parseTarget
+  <*> optional parseOutputMode
   <*> switch (long "oneshot" <> short '1')
 
 parseOutputMode :: Parser OutputMode

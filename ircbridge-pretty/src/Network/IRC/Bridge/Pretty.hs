@@ -67,7 +67,7 @@ data OutputMode =
   | PrettySimple
   | Pretty
   | PrettyDull
-  deriving (Eq, Show)
+  deriving (Eq, Ord, Show)
 
 renderInputMode
   :: OutputMode

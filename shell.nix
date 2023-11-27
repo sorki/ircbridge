@@ -12,6 +12,7 @@ let
     "ircbridge-ircbot-amqp"
     "ircbridge-ircbot-multi"
     "ircbridge-ircbot-zre"
+    "ircbridge-optparse"
     "ircbridge-pretty"
     "ircbridge-zre"
     "ircbridge-zre-util"

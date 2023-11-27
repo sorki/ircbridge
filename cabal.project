@@ -7,6 +7,7 @@ packages:
   ./ircbridge-ircbot-amqp/*.cabal
   ./ircbridge-ircbot-multi/*.cabal
   ./ircbridge-ircbot-zre/*.cabal
+  ./ircbridge-optparse/*.cabal
   ./ircbridge-pretty/*.cabal
   ./ircbridge-zre/*.cabal
   ./ircbridge-zre-util/*.cabal

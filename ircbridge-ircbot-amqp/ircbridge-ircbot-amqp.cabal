@@ -16,21 +16,21 @@ library
   hs-source-dirs:      src
   exposed-modules:     Network.IRC.Bot.Part.AMQP
   build-depends:       base >= 4.7 && < 5
-                     , bytestring
-                     , containers
-                     , text
-                     , time
-                     , stm
-                     , ircbot
                      , ircbridge-types
                      , ircbridge-ircbot
                      , ircbridge-amqp
+                     , bytestring
+                     , containers
+                     , ircbot
+                     , stm
+                     , text
+                     , time
   default-language:    Haskell2010
 
 executable ircbridge-ircbot-amqp
   hs-source-dirs:      .
   main-is:             Main.hs
-  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+  ghc-options:         -Wall -Wunused-packages -Werror -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , ircbot
                      , ircbridge-ircbot-amqp

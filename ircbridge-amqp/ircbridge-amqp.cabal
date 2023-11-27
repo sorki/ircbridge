@@ -13,18 +13,18 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
-  ghc-options:         -Wall
+  ghc-options:         -Wall -Wunused-packages -Werror
   exposed-modules:     Network.IRC.Bridge.AMQP
                      , Network.IRC.Bridge.AMQP.Serialize
   build-depends:       base >= 4.7 && < 5
-                     , bytestring
-                     , containers
-                     , text
-                     , time
-                     , stm
-                     , amqp
                      , ircbridge-types
                      , ircbridge-ircbot
+                     , amqp
+                     , bytestring
+                     , containers
+                     , stm
+                     , text
+                     , time
   default-language:    Haskell2010
 
 test-suite ircbridge-amqp-serialize
@@ -35,10 +35,10 @@ test-suite ircbridge-amqp-serialize
   build-depends:       base >= 4.7 && < 5
                      , ircbridge-amqp
                      , ircbridge-types
+                     , quickcheck-instances
                      , tasty
                      , tasty-discover
                      , tasty-quickcheck
-                     , quickcheck-instances
   default-language:    Haskell2010
 
 source-repository head

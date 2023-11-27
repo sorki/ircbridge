@@ -6,6 +6,7 @@ module Network.IRC.Bridge.Pretty (
   , prettyInput
   , renderOutput
   , renderInput
+  , renderTermInput
   , OutputMode(..)
   , renderInputMode
   ) where
@@ -16,6 +17,7 @@ import Data.Time.Format.ISO8601
 
 import Prettyprinter
 import Prettyprinter.Render.Text
+import qualified Prettyprinter.Render.Terminal as Term
 
 import Network.IRC.Bridge.Types
 
@@ -24,10 +26,22 @@ import qualified Data.Text.Lazy
 import qualified Text.Pretty.Simple
 
 renderOutput :: IRCOutput -> Text
-renderOutput = renderStrict . layoutPretty defaultLayoutOptions . prettyOutput
+renderOutput =
+    renderStrict
+  . layoutPretty defaultLayoutOptions
+  . prettyOutput
 
 renderInput :: IRCInput -> Text
-renderInput  = renderStrict . layoutPretty defaultLayoutOptions . prettyInput
+renderInput =
+    renderStrict
+  . layoutPretty defaultLayoutOptions
+  . prettyInput
+
+renderTermInput :: IRCInput -> Text
+renderTermInput =
+    Term.renderStrict
+  . layoutPretty defaultLayoutOptions
+  . prettyInput
 
 prettyTarget :: IRCTarget -> Doc ann
 prettyTarget (IRCUser    u) = "user:" <+> pretty u

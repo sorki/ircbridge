@@ -13,25 +13,21 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
-  ghc-options:         -Wall
+  ghc-options:         -Wall -Wunused-packages -Werror
   exposed-modules:     Network.IRC.Bridge.ZRE.Util
   build-depends:       base >= 4.7 && < 5
-                     , bytestring
-                     , containers
-                     , text
-                     , time
-                     , stm
-                     , pretty-simple
                      , ircbridge-pretty
                      , ircbridge-types
                      , ircbridge-zre
+                     , text
+                     , stm
                      , zre
   default-language:    Haskell2010
 
 executable ircbridge-zre-tail
   hs-source-dirs:      .
   main-is:             Tail.hs
-  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+  ghc-options:         -Wall -Wunused-packages -Werror -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , ircbridge-optparse
                      , ircbridge-zre-util
@@ -41,7 +37,7 @@ executable ircbridge-zre-tail
 executable ircbridge-zre-echo
   hs-source-dirs:      .
   main-is:             Echo.hs
-  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+  ghc-options:         -Wall -Wunused-packages -Werror -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , ircbridge-zre-util
   default-language:    Haskell2010
@@ -49,19 +45,13 @@ executable ircbridge-zre-echo
 executable ircbridge-zre-cat
   hs-source-dirs:      .
   main-is:             Cat.hs
-  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+  ghc-options:         -Wall -Wunused-packages -Werror -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , ircbridge-cereal
                      , ircbridge-optparse
                      , ircbridge-types
-                     , ircbridge-zre-util
-                     , optparse-applicative
-                     , text
-                     , time
                      , zre
   default-language:    Haskell2010
-
-
 
 source-repository head
   type:     git

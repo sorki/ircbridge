@@ -6,6 +6,8 @@ module Network.IRC.Bridge.Pretty (
   , prettyInput
   , renderOutput
   , renderInput
+  , OutputMode(..)
+  , renderInputMode
   ) where
 
 import Data.Text (Text)
@@ -17,7 +19,14 @@ import Prettyprinter.Render.Text
 
 import Network.IRC.Bridge.Types
 
+import qualified Data.Text
+import qualified Data.Text.Lazy
+import qualified Text.Pretty.Simple
+
+renderOutput :: IRCOutput -> Text
 renderOutput = renderStrict . layoutPretty defaultLayoutOptions . prettyOutput
+
+renderInput :: IRCInput -> Text
 renderInput  = renderStrict . layoutPretty defaultLayoutOptions . prettyInput
 
 prettyTarget :: IRCTarget -> Doc ann
@@ -49,3 +58,22 @@ prettyOutput IRCOutput{..} =
   <>  prettyFlag outputIsNotice "notice"
   <>  ":"
   <>  pretty outputBody
+
+data OutputMode =
+    ShowOnly
+  | PrettySimple
+  | Pretty
+  | PrettyDull
+  deriving (Eq, Show)
+
+renderInputMode
+  :: OutputMode
+  -> IRCInput
+  -> Text
+renderInputMode ShowOnly =
+    Data.Text.pack . show
+renderInputMode PrettySimple =
+    Data.Text.Lazy.toStrict
+  . Text.Pretty.Simple.pShow
+renderInputMode Pretty = renderInput
+

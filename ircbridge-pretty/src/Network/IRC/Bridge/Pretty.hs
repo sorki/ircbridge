@@ -17,6 +17,7 @@ import Data.Time.Format.ISO8601
 
 import Prettyprinter
 import Prettyprinter.Render.Text
+import Prettyprinter.Render.Terminal (AnsiStyle, Color(..), bold, color)
 import qualified Prettyprinter.Render.Terminal as Term
 
 import Network.IRC.Bridge.Types
@@ -43,22 +44,35 @@ renderTermInput =
   . layoutPretty defaultLayoutOptions
   . prettyInput
 
-prettyTarget :: IRCTarget -> Doc ann
-prettyTarget (IRCUser    u) = "user:" <+> pretty u
-prettyTarget (IRCChannel c) = "chan:" <+> pretty c
+prettyTarget :: IRCTarget -> Doc AnsiStyle
+prettyTarget (IRCUser u) =
+  annotate (color Cyan)
+  "user:" <+> pretty u
+prettyTarget (IRCChannel c) =
+  annotate (color Magenta)
+  "chan:" <+> pretty c
 
-prettyTime :: UTCTime -> Doc ann
-prettyTime = brackets . pretty . iso8601Show
+prettyTime :: UTCTime -> Doc AnsiStyle
+prettyTime =
+    brackets
+  . annotate (color Blue)
+  . pretty
+  . iso8601Show
 
-prettySender :: Pretty a => Maybe a -> Doc ann
-prettySender (Just u) = braces ("sender:" <+> pretty u)
+prettySender :: Pretty a => Maybe a -> Doc AnsiStyle
+prettySender (Just u) =
+    braces
+  $ "sender:" <+>
+     ( annotate (color Yellow)
+       $ pretty u
+     )
 prettySender Nothing = mempty
 
-prettyFlag :: Bool -> String -> Doc ann
+prettyFlag :: Bool -> String -> Doc AnsiStyle
 prettyFlag True  x = braces (pretty x)
 prettyFlag False _ = mempty
 
-prettyInput :: IRCInput -> Doc ann
+prettyInput :: IRCInput -> Doc AnsiStyle
 prettyInput IRCInput{..} =
       prettyTime inputTime
   <+> angles (prettyTarget inputFrom)
@@ -66,9 +80,9 @@ prettyInput IRCInput{..} =
   <>  prettyFlag inputHasCmdPrefix "cmdPrefix"
   <>  prettyFlag inputBotAddressed "addressed"
   <>  ":"
-  <>  pretty inputBody
+  <+> annotate bold (pretty inputBody)
 
-prettyOutput :: IRCOutput -> Doc ann
+prettyOutput :: IRCOutput -> Doc AnsiStyle
 prettyOutput IRCOutput{..} =
       prettyTime outputTime
   <+> angles (prettyTarget outputTo)
@@ -92,6 +106,5 @@ renderInputMode ShowOnly =
 renderInputMode PrettySimple =
     Data.Text.Lazy.toStrict
   . Text.Pretty.Simple.pShow
-renderInputMode Pretty = renderInput
--- TODO
+renderInputMode Pretty = renderTermInput
 renderInputMode PrettyDull = renderInput

@@ -30,6 +30,7 @@ in
   options = {
     services.ircbridge = {
       enable = mkEnableOption "Enable ircbridge";
+      enableOverlay = mkEnableOption "Enable ircbridge overlay";
       type = mkOption {
         type = types.enum [ "amqp" "zre" "multi" ];
         default = "amqp";
@@ -96,7 +97,11 @@ in
       isMulti = cfg.type == "multi";
     in
     mkMerge [
-    (mkIf enabled {
+    {
+      services.ircbridge.enableOverlay = mkDefault cfg.enable;
+    }
+
+    (mkIf cfg.enableOverlay {
       nixpkgs.overlays = [ hsOverlay ];
     })
 

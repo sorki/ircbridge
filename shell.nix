@@ -1,5 +1,8 @@
-{ nixpkgs ? import <nixpkgs> {}}:
+attrs@{...}:
 let
+  inherit (import ./. attrs) pkgs haskellPackages;
+  hslib = pkgs.haskell.lib;
+
   packages = [
     "ircbridge-types"
     "ircbridge-aeson"
@@ -14,8 +17,6 @@ let
     "ircbridge-zre-util"
   ];
 
-  inherit (import ./. { inherit nixpkgs; }) pkgs haskellPackages;
-  hslib = nixpkgs.haskell.lib;
   extract-external-inputs = p:
     builtins.filter (dep: !(builtins.elem dep packages))
       (map (x: x.pname) (hslib.getHaskellBuildInputs haskellPackages.${p}));
@@ -29,5 +30,5 @@ in (haskellPackages.mkDerivation {
   pname = "ircbridge";
   version = "0.0.0.0";
   libraryHaskellDepends = external-inputs;
-  license = nixpkgs.stdenv.lib.licenses.asl20;
+  license = pkgs.stdenv.lib.licenses.asl20;
 }).env // package-envs

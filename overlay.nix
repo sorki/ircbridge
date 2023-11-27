@@ -1,4 +1,7 @@
-hsuper: hself: {
+pkgs: hself: hsuper: {
+  # bounds, till 0.6.6.2 is out https://github.com/stepcut/ircbot/pull/9
+  ircbot =
+    pkgs.haskell.lib.markUnbroken (pkgs.haskell.lib.doJailbreak hsuper.ircbot);
   ircbridge-types =
     hself.callCabal2nix "ircbridge-types"       ./ircbridge-types        {};
   ircbridge-aeson =

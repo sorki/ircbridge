@@ -10,3 +10,7 @@ packages:
   ./ircbridge-pretty/*.cabal
   ./ircbridge-zre/*.cabal
   ./ircbridge-zre-util/*.cabal
+
+-- till https://github.com/stepcut/ircbot/pull/9
+allow-newer:
+  ircbot:*

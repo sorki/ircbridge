@@ -108,6 +108,7 @@ in
     (mkIf (enabled && isAmqp && !isMulti) { # multi would be run via services.zre
       environment.systemPackages = with pkgs; [
         haskellPackages.amqp-utils
+        haskellPackages.ircbridge-amqp-util
       ];
 
       systemd.services.ircbridge-amqp = {
@@ -126,7 +127,6 @@ in
           PrivateTmp="yes";
           ProtectSystem="yes";
           ProtectHome="yes";
-          ProtectDevices="yes";
           ProtectKernelTunables="yes";
           ProtectKernelModules="yes";
           ProtectControlGroups="yes";

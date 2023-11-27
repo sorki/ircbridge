@@ -12,8 +12,8 @@ import Data.Text (Text)
 import Data.Time.Clock (UTCTime)
 import Data.Time.Format.ISO8601
 
-import Data.Text.Prettyprint.Doc
-import Data.Text.Prettyprint.Doc.Render.Text
+import Prettyprinter
+import Prettyprinter.Render.Text
 
 import Network.IRC.Bridge.Types
 

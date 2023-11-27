@@ -36,13 +36,15 @@ prettyTarget (IRCChannel c) = "chan:" <+> pretty c
 prettyTime :: UTCTime -> Doc ann
 prettyTime = brackets . pretty . iso8601Show
 
+prettySender :: Pretty a => Maybe a -> Doc ann
 prettySender (Just u) = braces ("sender:" <+> pretty u)
 prettySender Nothing = mempty
 
 prettyFlag :: Bool -> String -> Doc ann
 prettyFlag True  x = braces (pretty x)
-prettyFlag False x = mempty
+prettyFlag False _ = mempty
 
+prettyInput :: IRCInput -> Doc ann
 prettyInput IRCInput{..} =
       prettyTime inputTime
   <+> angles (prettyTarget inputFrom)
@@ -52,6 +54,7 @@ prettyInput IRCInput{..} =
   <>  ":"
   <>  pretty inputBody
 
+prettyOutput :: IRCOutput -> Doc ann
 prettyOutput IRCOutput{..} =
       prettyTime outputTime
   <+> angles (prettyTarget outputTo)
@@ -76,4 +79,5 @@ renderInputMode PrettySimple =
     Data.Text.Lazy.toStrict
   . Text.Pretty.Simple.pShow
 renderInputMode Pretty = renderInput
-
+-- TODO
+renderInputMode PrettyDull = renderInput

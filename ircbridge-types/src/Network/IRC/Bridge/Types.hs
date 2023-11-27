@@ -51,10 +51,10 @@ mkIRCOutput
   -> Text
   -> Bool -- ^ Send a message as notice instead of default privmsg
   -> IO IRCOutput
-mkIRCOutput to body isNotice = do
+mkIRCOutput sendTo body isNotice = do
   now <- Data.Time.Clock.getCurrentTime
   pure $ IRCOutput
-    { outputTo = to
+    { outputTo = sendTo
     , outputBody = body
     , outputTime = now
     , outputIsNotice = isNotice

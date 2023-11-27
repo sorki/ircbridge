@@ -11,13 +11,9 @@ module Network.IRC.Bridge.ZRE (
   ) where
 
 import Data.ByteString (ByteString)
-import Control.Monad (forever, void)
-import Control.Monad.IO.Class (liftIO)
-import Control.Concurrent (forkIO)
 import Control.Concurrent.STM
-import Control.Concurrent.Async.Lifted
 
-import Network.IRC.Bridge.Serialize
+import Network.IRC.Bridge.Serialize ()
 import Network.IRC.Bridge.Types
 import Network.ZRE
 import Network.ZRE.Chan
@@ -27,6 +23,7 @@ data ZREConfig = ZREConfig {
   , cfgIRCOutGroup :: ByteString
   } deriving (Eq, Show)
 
+defaultZREConfig :: ZREConfig
 defaultZREConfig = ZREConfig "ircInput" "ircOutput"
 
 zreRun :: IO ( TChan IRCOutput

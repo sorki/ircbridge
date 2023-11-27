@@ -13,6 +13,7 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
+  ghc-options:         -Wall
   exposed-modules:     Network.IRC.Bridge.ZRE.Util
   build-depends:       base >= 4.7 && < 5
                      , bytestring
@@ -30,7 +31,7 @@ library
 executable ircbridge-zre-pretty
   hs-source-dirs:      .
   main-is:             Pretty.hs
-  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , ircbridge-zre-util
   default-language:    Haskell2010
@@ -38,7 +39,7 @@ executable ircbridge-zre-pretty
 executable ircbridge-zre-echo
   hs-source-dirs:      .
   main-is:             Echo.hs
-  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , ircbridge-zre-util
   default-language:    Haskell2010
@@ -46,7 +47,7 @@ executable ircbridge-zre-echo
 executable ircbridge-zre-cat
   hs-source-dirs:      .
   main-is:             Cat.hs
-  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , ircbridge-types
                      , ircbridge-cereal

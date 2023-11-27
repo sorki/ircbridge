@@ -77,6 +77,7 @@ stmFromPart partName chan = do
 
   liftIO $ atomically $ writeTChan chan payload
 
+tryStripPrefix :: Text -> Text -> Text
 tryStripPrefix pfx inp = case T.stripPrefix pfx inp of
   Nothing -> inp
   Just stripped -> stripped

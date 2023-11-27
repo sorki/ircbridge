@@ -4,8 +4,8 @@ module Network.IRC.Bridge.Serialize where
 
 import Data.ByteString (ByteString)
 import Data.Serialize
-import Data.Serialize.Text
-import Data.Time.Clock.Serialize
+import Data.Serialize.Text ()
+import Data.Time.Clock.Serialize ()
 
 import Network.IRC.Bridge.Types
 

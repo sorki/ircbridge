@@ -4,13 +4,11 @@ module Main where
 
 import Control.Monad.IO.Class (liftIO)
 import Data.Text (Text)
-import qualified Data.Time.Clock
 
 import Options.Applicative
 
 import Network.IRC.Bridge.Types
 import Network.IRC.Bridge.Serialize
-import Network.IRC.Bridge.ZRE.Util
 
 import Network.ZRE
 
@@ -31,8 +29,10 @@ parseTarget =
       (IRCUser <$> strOption (long "user" <> short 'u'))
   <|> (IRCChannel <$> strOption (long "chan" <> short 'c'))
 
+g :: Group
 g = mkGroup "ircInput"
 
+main :: IO ()
 main = runZreParse parseCatOptions $ \CatOpts{..} -> do
   zjoin g
   liftIO (mkIRCOutput catTarget catBody catNotice)

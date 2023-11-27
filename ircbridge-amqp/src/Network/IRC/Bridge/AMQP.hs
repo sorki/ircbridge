@@ -8,7 +8,7 @@ module Network.IRC.Bridge.AMQP (
   , AMQPConfig(..)
   ) where
 
-import Control.Monad (forever)
+import Control.Monad (forever, void)
 import Control.Concurrent (forkIO, threadDelay)
 import Control.Concurrent.STM
 import Control.Monad.IO.Class (liftIO)
@@ -31,6 +31,7 @@ data AMQPConfig = AMQPConfig {
   , cfgRoutingKeyFrom :: Text
   } deriving (Eq, Show)
 
+defaultAMQPConfig :: AMQPConfig
 defaultAMQPConfig = AMQPConfig {
     cfgHostName        = "localhost"
   , cfgVirtualHost     = "/"
@@ -70,7 +71,7 @@ amqpRunWith AMQPConfig{..} = do
   bindQueue chan q cfgExchangeName cfgRoutingKey
 
   tChan <- newTChanIO
-  consumeMsgs chan q Ack (amqpCallback tChan)
+  _ <- consumeMsgs chan q Ack (amqpCallback tChan)
 
   -- IRC -> AMQP
 
@@ -86,7 +87,7 @@ amqpRunWith AMQPConfig{..} = do
   bindQueue chanFrom qf cfgExchangeName cfgRoutingKeyFrom
   tChanFrom <- newTChanIO
 
-  forkIO $ forever $ do
+  void $ forkIO $ forever $ do
     ircInput <- atomically $ readTChan tChanFrom
     publishMsg
       chanFrom
@@ -94,7 +95,7 @@ amqpRunWith AMQPConfig{..} = do
       cfgRoutingKeyFrom
       (amqpEncodeIRCInput ircInput)
 
-  forkIO $ do
+  void $ forkIO $ do
     X.catch
       (forever $ threadDelay 5000000)
       (\e -> putStrLn ("amqp exception" ++ show (e :: X.SomeException)))

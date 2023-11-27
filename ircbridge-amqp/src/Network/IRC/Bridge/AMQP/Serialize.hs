@@ -81,8 +81,8 @@ amqpDecodeIRCInput msg = do
 
   let inputBody = decode $ BL.toStrict $ msgBody msg
       inputSender = case Data.Map.lookup "sender" headers of
-        Nothing -> Nothing
         Just (FVString u) -> Just $ decode u
+        _ -> Nothing
 
   inputFrom <- case (Data.Map.lookup "user" headers, Data.Map.lookup "channel" headers) of
     (Just (FVString u), _) -> Just $ IRCUser    $ decode u

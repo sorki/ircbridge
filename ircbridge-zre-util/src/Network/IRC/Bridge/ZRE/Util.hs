@@ -12,7 +12,6 @@ module Network.IRC.Bridge.ZRE.Util (
   , echoMap
   ) where
 
-import Control.Monad.IO.Class (liftIO)
 import Control.Concurrent.STM
 import qualified Control.Monad
 import qualified Data.Text.IO
@@ -24,16 +23,19 @@ import Network.IRC.Bridge.ZRE
 import Network.ZRE
 import Network.ZRE.Chan
 
+procIRCInputFromZRE :: (IRCInput -> IO a) -> IO ()
 procIRCInputFromZRE fun = do
   (_ircOut, ircIn) <- zreConsumeWith defaultZREConfig
-  Control.Monad.forever $ do
+  Control.Monad.void $ Control.Monad.forever $ do
     msg <- atomically $ readTChan ircIn
     fun msg
 
+prettyIRCInputFromZRE :: OutputMode -> IO ()
 prettyIRCInputFromZRE mode =
   procIRCInputFromZRE
     (Data.Text.IO.putStrLn . renderInputMode mode)
 
+echoInToOut :: IRCInput -> IRCOutput
 echoInToOut IRCInput{..} = IRCOutput
   { outputTo = inputFrom
   , outputBody = inputBody
@@ -41,14 +43,15 @@ echoInToOut IRCInput{..} = IRCOutput
   , outputIsNotice = False
   }
 
+echoSTM :: IO ()
 echoSTM = do
   (ircOut, ircIn) <- zreConsumeWith defaultZREConfig
-  Control.Monad.forever $ do
+  Control.Monad.void $ Control.Monad.forever $ do
     atomically $ do
       x <- readTChan ircIn
       writeTChan ircOut $ echoInToOut x
 
+echoMap :: IO ()
 echoMap = do
-  print "wot"
   runZre $ mapToGroup @"ircOutput" @"ircInput" echoInToOut
   --runZre $ mapToGroup @"ircOutput" @"ircDbg" @IRCInput @String show

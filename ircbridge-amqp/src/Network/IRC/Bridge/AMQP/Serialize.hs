@@ -40,7 +40,7 @@ amqpEncodeIRCOutput IRCOutput{..} = newMsg
       ]
   }
 
--- | Decode AMQP `Message` to `IRCInput`
+-- | Decode AMQP `Message` to `IRCOutput`
 amqpDecodeIRCOutput :: Message -> Maybe IRCOutput
 amqpDecodeIRCOutput msg = do
   (FieldTable headers)  <- msgHeaders msg

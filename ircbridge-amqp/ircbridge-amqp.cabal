@@ -27,11 +27,10 @@ library
                      , time
   default-language:    Haskell2010
 
-test-suite ircbridge-amqp-serialize
+test-suite roundtrip
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Main.hs
-  other-modules:       Serialize
   build-depends:       base >= 4.7 && < 5
                      , ircbridge-amqp
                      , ircbridge-tests

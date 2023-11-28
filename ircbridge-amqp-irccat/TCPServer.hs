@@ -28,7 +28,7 @@ main = do
     irccatServerPort
     (loop sopts)
   where
-    loop sopts@IRCCatServerOpts{..} sock = do
+    loop IRCCatServerOpts{..} sock = do
         sockMsg <- Network.Socket.ByteString.recv sock 1024
         Control.Monad.unless (Data.ByteString.Char8.null sockMsg) $ do
           now <- Data.Time.Clock.getCurrentTime
@@ -56,8 +56,6 @@ main = do
                 (Data.Text.IO.putStrLn . Network.IRC.Bridge.Pretty.renderOutput)
 
               Network.IRC.Bridge.AMQP.publishIRCOutputs msgs
-
-          loop sopts sock
 
     opts =
       info

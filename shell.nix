@@ -7,6 +7,7 @@ let
     "ircbridge-types"
     "ircbridge-aeson"
     "ircbridge-amqp"
+    "ircbridge-amqp-irccat"
     "ircbridge-amqp-util"
     "ircbridge-cereal"
     "ircbridge-ircbot"
@@ -29,7 +30,7 @@ let
     value = haskellPackages.${p}.env;
   }) packages);
 in (haskellPackages.mkDerivation {
-  pname = "ircbridge";
+  pname = "ircbridge-shell";
   version = "0.0.0.0";
   libraryHaskellDepends = external-inputs;
   license = pkgs.stdenv.lib.licenses.asl20;

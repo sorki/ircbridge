@@ -1,0 +1,51 @@
+name:                ircbridge-amqp-irccat
+version:             0.1.0.0
+synopsis:            ircbridge-amqp irccat compat layer
+description:         Pipe messages to executable or TCP server a la irccat
+homepage:            https://github.com/sorki/ircbridge
+license:             BSD3
+author:              Richard Marko
+maintainer:          srk@48.io
+copyright:           2023 Richard Marko
+category:            Networking
+build-type:          Simple
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+--  ghc-options:         -Wall -Wunused-packages -Werror
+  ghc-options:         -Wall
+  exposed-modules:     Network.IRC.Bridge.IRCCat
+  build-depends:       base >= 4.7 && < 5
+                     , ircbridge-types
+                     , text
+                     , time
+  default-language:    Haskell2010
+
+executable ircbridge-amqp-irccat
+  hs-source-dirs:      .
+  main-is:             Cat.hs
+  ghc-options:         -Wall -Wunused-packages -Werror -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , ircbridge-amqp
+                     , ircbridge-amqp-irccat
+                     , ircbridge-optparse
+                     , ircbridge-types
+                     , optparse-applicative
+  default-language:    Haskell2010
+
+executable ircbridge-amqp-irccat-tcpserver
+  hs-source-dirs:      .
+  main-is:             TCPServer.hs
+  ghc-options:         -Wall -Wunused-packages -Werror -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , ircbridge-amqp
+                     , ircbridge-amqp-irccat
+                     , ircbridge-optparse
+                     , ircbridge-types
+                     , optparse-applicative
+  default-language:    Haskell2010
+
+source-repository head
+  type:     git
+  location: https://github.com/sorki/ircbridge

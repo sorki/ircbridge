@@ -19,6 +19,7 @@ let
   haskellPackages = packageSet.override overrideHaskellPackages;
 in {
   inherit (haskellPackages)
+    ircbridge-amqp-irccat
     ircbridge-amqp-util
     ircbridge-ircbot-amqp
     ircbridge-ircbot-multi

@@ -8,6 +8,8 @@ pkgs: hself: hsuper: {
     hself.callCabal2nix "ircbridge-aeson"       ./ircbridge-aeson        {};
   ircbridge-amqp =
     hself.callCabal2nix "ircbridge-amqp"        ./ircbridge-amqp         {};
+  ircbridge-amqp-irccat =
+    hself.callCabal2nix "ircbridge-amqp-irccat" ./ircbridge-amqp-irccat  {};
   ircbridge-amqp-util =
     hself.callCabal2nix "ircbridge-amqp-util"   ./ircbridge-amqp-util    {};
   ircbridge-cereal =

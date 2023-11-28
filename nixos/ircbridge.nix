@@ -31,6 +31,7 @@ in
     services.ircbridge = {
       enable = mkEnableOption "Enable ircbridge";
       enableOverlay = mkEnableOption "Enable ircbridge overlay";
+      enableAMQPUtils = mkEnableOption "Include haskellPackages.amqp-utils in systemPackages";
       type = mkOption {
         type = types.enum [ "amqp" "zre" "multi" ];
         default = "amqp";
@@ -99,6 +100,7 @@ in
     mkMerge [
     {
       services.ircbridge.enableOverlay = mkDefault cfg.enable;
+      services.ircbridge.enableAMQPUtils = mkDefault cfg.enable;
     }
 
     (mkIf cfg.enableOverlay {
@@ -107,9 +109,13 @@ in
 
     (mkIf (enabled && isAmqp && !isMulti) { # multi would be run via services.zre
       environment.systemPackages = with pkgs; [
-        haskellPackages.amqp-utils
         haskellPackages.ircbridge-amqp-util
-      ];
+      ]
+      ++
+      lib.optional
+        cfg.enableAMQPUtils
+        haskellPackages.amqp-utils
+        ;
 
       systemd.services.ircbridge-amqp = {
         description = "AMQP ircbridge";
@@ -138,10 +144,14 @@ in
 
     (mkIf (enabled && (isZre || isMulti))  {
       environment.systemPackages = with pkgs; [
-        haskellPackages.amqp-utils
-        haskellPackages.zre
         haskellPackages.ircbridge-zre-util
-      ];
+        haskellPackages.zre
+      ]
+      ++
+      lib.optional
+        cfg.enableAMQPUtils
+        haskellPackages.amqp-utils
+        ;
 
       /*
       # Disabled for now as it requires zre overlay

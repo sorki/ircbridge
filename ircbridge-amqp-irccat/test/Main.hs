@@ -12,7 +12,7 @@ import Network.IRC.Bridge.IRCCat
 import Network.IRC.Bridge.Types
 
 defTarget :: IRCTarget
-defTarget = forChannel "def"
+defTarget = either undefined id $ forChannel "#def"
 
 testTime :: UTCTime
 testTime = Data.Time.Clock.POSIX.posixSecondsToUTCTime 0
@@ -83,11 +83,14 @@ spec = describe "IRCCat input decoding" $ do
     $ testOk1 "@user" "Message with user target" (forUser "user")
 
   it "handles message with channel target"
-    $ testOk1 "#chan" "Message with channel target" (forChannel "chan")
+    $ testOk1 "#chan" "Message with channel target" (either undefined id $ forChannel "#chan")
 
   it "handles multiple targets"
     $ testOkMany "#chan,@user,#chan2" "Message"
-        [ forChannel "chan", forUser "user", forChannel "chan2" ]
+        $ Data.Either.rights
+            [ forChannel "#chan"
+            , pure $ forUser "user"
+            , forChannel "#chan2" ]
 
   describe "degenerate cases" $ do
     it "ignores newlines"

@@ -86,8 +86,8 @@ parseTarget = \case
     $ "Not enough input for target parser: '"
     <> x
     <> "'"
-  x | "#" `Data.Text.isPrefixOf` x -> pure $ IRCChannel (Data.Text.tail x)
-  x | "@" `Data.Text.isPrefixOf` x -> pure $ IRCUser (Data.Text.tail x)
+  x | "#" `Data.Text.isPrefixOf` x -> forChannel x
+  x | "@" `Data.Text.isPrefixOf` x -> pure $ forUser (Data.Text.tail x)
   x | otherwise ->
       Left
     $ "Failed to parse target, #channel or @user is required: '"

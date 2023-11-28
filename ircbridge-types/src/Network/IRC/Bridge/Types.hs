@@ -15,6 +15,7 @@ import Data.Time.Clock (UTCTime)
 import Data.Typeable (Typeable)
 import GHC.Generics
 
+import qualified Data.Text
 import qualified Data.Time.Clock
 
 data IRCTarget = IRCUser Text | IRCChannel Text
@@ -43,8 +44,11 @@ data IRCOutput = IRCOutput {
 forUser :: Text -> IRCTarget
 forUser = IRCUser
 
-forChannel :: Text -> IRCTarget
-forChannel = IRCChannel
+forChannel :: Text -> Either Text IRCTarget
+forChannel c | (Data.Text.pack "#") `Data.Text.isPrefixOf` c =
+  pure $ IRCChannel c
+forChannel _ | otherwise =
+  Left (Data.Text.pack "Channel name has to start with #")
 
 mkIRCOutput
   :: IRCTarget

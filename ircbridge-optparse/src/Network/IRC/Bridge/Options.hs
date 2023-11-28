@@ -10,6 +10,7 @@ module Network.IRC.Bridge.Options
   ) where
 
 import Data.Text (Text)
+import qualified Data.Text
 
 import Options.Applicative
 
@@ -18,12 +19,12 @@ import Network.IRC.Bridge.Types
 
 parseTarget :: Parser IRCTarget
 parseTarget =
-      (IRCUser <$> strOption
+      (forUser <$> strOption
         (  long "user"
         <> short 'u'
         <> help "Send to user (cat) or filter only messages from user (tail)"
         ))
-  <|> (IRCChannel <$> strOption
+  <|> (either (error . Data.Text.unpack) id . forChannel <$> strOption
         (  long "chan"
         <> short 'c'
         <> help "Send to channel (cat) or filter only messages from channel (tail)"

@@ -1,6 +1,8 @@
-module Serialize where
+module Serialize (spec) where
 
-import Test.Tasty.QuickCheck
+import Test.Hspec (Spec, describe, shouldBe)
+import Test.Hspec.QuickCheck (prop)
+import Test.QuickCheck (Arbitrary(..), oneof)
 import Test.QuickCheck.Instances.Time
 import Test.QuickCheck.Instances.Text
 
@@ -31,8 +33,10 @@ instance Arbitrary IRCOutput where
     <*> arbitrary
     <*> arbitrary
 
-prop_ircInput x =
-  (amqpDecodeIRCInput . amqpEncodeIRCInput $ x) === Just x
+spec :: Spec
+spec = describe "amqp encoding" $ do
+  prop "roundtrips IRCInput" $ \x ->
+    (amqpDecodeIRCInput . amqpEncodeIRCInput $ x) `shouldBe` Just x
 
-prop_ircOutput x =
-  (amqpDecodeIRCOutput . amqpEncodeIRCOutput $ x) === Just x
+  prop "roundtrips IRCOutput" $ \x ->
+    (amqpDecodeIRCOutput . amqpEncodeIRCOutput $ x) `shouldBe` Just x

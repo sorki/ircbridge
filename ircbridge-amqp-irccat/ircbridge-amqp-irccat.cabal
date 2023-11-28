@@ -13,8 +13,7 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
---  ghc-options:         -Wall -Wunused-packages -Werror
-  ghc-options:         -Wall
+  ghc-options:         -Wall -Wunused-packages -Werror
   exposed-modules:     Network.IRC.Bridge.IRCCat
   build-depends:       base >= 4.7 && < 5
                      , ircbridge-types
@@ -32,6 +31,8 @@ executable ircbridge-amqp-irccat
                      , ircbridge-optparse
                      , ircbridge-types
                      , optparse-applicative
+                     , text
+                     , time
   default-language:    Haskell2010
 
 executable ircbridge-amqp-irccat-tcpserver

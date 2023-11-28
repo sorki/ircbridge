@@ -15,5 +15,10 @@ packages:
 
 -- till https://github.com/stepcut/ircbot/pull/9
 allow-newer:
-    ircbot:*
+    ircbot:bytestring
+  , ircbot:containers
+  --, ircbot:mtl
+  , ircbot:time
+  , ircbot:optparse-applicative
+  -- but not unix ^
   , cereal-time:time

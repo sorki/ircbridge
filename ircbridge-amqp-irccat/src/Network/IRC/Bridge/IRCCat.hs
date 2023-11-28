@@ -41,7 +41,7 @@ parseLikeIRCCat defTarget utcTime isNotice =
             Left "Empty message"
         (x:xs) | hasChanOrUserChar x
                  && Data.Text.elem ',' x ->
-          case map parseTarget (Data.Text.splitOn ":" x) of
+          case map parseTarget (Data.Text.splitOn "," x) of
             ts | any (Data.Either.isLeft) ts ->
                  Left
               $ "Failed to parse multiple targets, got "

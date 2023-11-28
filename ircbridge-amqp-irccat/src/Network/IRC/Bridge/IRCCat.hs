@@ -26,10 +26,10 @@ parseLikeIRCCat
   -> Text  -- ^ Input
   -> Either Text [IRCOutput]
 parseLikeIRCCat defTarget utcTime isNotice =
-  let makeOutput target words =
+  let makeOutput target msgWords =
         IRCOutput
            { outputTo = target
-           , outputBody = Data.Text.unwords words
+           , outputBody = Data.Text.unwords msgWords
            , outputTime = utcTime
            , outputIsNotice = isNotice
            }

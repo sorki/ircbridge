@@ -24,4 +24,5 @@ allow-newer:
   , ircbot:time
   , ircbot:optparse-applicative
   -- but not unix ^
+-- https://github.com/zohl/cereal-time/pull/2
   , cereal-time:time

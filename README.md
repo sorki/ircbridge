@@ -2,7 +2,7 @@
 
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/sorki/ircbridge/ci.yaml?branch=master)](https://github.com/sorki/ircbridge/actions/workflows/ci.yaml)
 
-Type-safe swiss army knife for bidirectional IRC bridging.
+Type-safe swiss army knife for bi-directional IRC bridging.
 
 # Usage
 
@@ -68,9 +68,16 @@ or snoop messages sent to IRC sent by other clients
 konsum -x ircExchange -r amqp.irc
 ```
 
+## Why there are so many packages?
+
+Sort of an experiment in extreme modularity which allows reusing
+code without pulling in dependencies not required for certain frontends/backends.
+For example, `amqp` doesn't require `zre/zeromq`, nor `cereal` dependencies and
+`zre` doesn't require `amqp`, but uses `cereal` for serialization.
+
 ## Related projects
 
-- https://github.com/stepcut/ircbot/ used as an IRC frontend
-- https://github.com/sorki/xnand/ a bot using `ircbridge` as its backend (over AMQP)
-- https://github.com/irccloud/irccat inspiration for `ircbridge-amqp-irccat`
+- [ircbot](https://github.com/stepcut/ircbot/) used as an IRC frontend
+- [xnand](https://github.com/sorki/xnand/) a bot using `ircbridge` as its backend (over AMQP)
+- [irccat](https://github.com/irccloud/irccat) inspiration for `ircbridge-amqp-irccat`
 

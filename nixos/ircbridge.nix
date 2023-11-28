@@ -88,6 +88,26 @@ in
           description = "Delay between messages when rate-limited.";
         };
       };
+
+      irccat = {
+        enable = mkEnableOption "Enable ircbridge-amqp-irccat-tcpserver";
+        host = mkOption {
+          type = types.str;
+          default = "localhost";
+          description = "Host to listen on";
+        };
+        port = mkOption {
+          type = types.port;
+          default = 12345;
+          description = "Port to listen on";
+        };
+        defaultTarget = mkOption {
+          type = types.str;
+          description = "Default target to send messages if no target is specified in input";
+          example = "#bottest";
+        };
+        sendAsNotice = mkEnableOption "Send messages as /notice(s)";
+      };
     };
   };
   config =
@@ -110,6 +130,7 @@ in
     (mkIf (enabled && isAmqp && !isMulti) { # multi would be run via services.zre
       environment.systemPackages = with pkgs; [
         haskellPackages.ircbridge-amqp-util
+        haskellPackages.ircbridge-amqp-irccat
       ]
       ++
       lib.optional
@@ -142,8 +163,32 @@ in
       };
     })
 
+    (mkIf (enabled && (isAmqp || isMulti) && cfg.irccat.enable)
+    {
+      systemd.services.ircbridge-amqp-irccat-tcpserver = {
+        description = "IRCCat compat server";
+        after = [ "rabbitmq.service" ];
+        wantedBy = [ "multi-user.target" ];
+        script =
+        ''
+        ircbridge-amqp-irccat-tcpserver \
+          --chan '${cfg.irccat.defaultTarget}' \
+          --host '${cfg.irccat.host}' \
+          --port '${builtins.toString cfg.irccat.port}' ${lib.optionalString cfg.irccat.sendAsNotice "--notice"}
+        '';
+        path = [ pkgs.haskellPackages.ircbridge-amqp-irccat ];
+        serviceConfig = {
+            Restart = "always";
+            RestartSec = "3s";
+        };
+      };
+    }
+    )
+
     (mkIf (enabled && (isZre || isMulti))  {
       environment.systemPackages = with pkgs; [
+        haskellPackages.ircbridge-amqp-util
+        haskellPackages.ircbridge-amqp-irccat
         haskellPackages.ircbridge-zre-util
         haskellPackages.zre
       ]

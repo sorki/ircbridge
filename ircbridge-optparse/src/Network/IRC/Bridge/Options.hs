@@ -4,6 +4,8 @@ module Network.IRC.Bridge.Options
   ( parseTarget
   , CatOpts(..)
   , parseCatOptions
+  , IRCCatOpts(..)
+  , parseIRCCatOptions
   , TailOpts(..)
   , parseTailOptions
   , parseOutputMode
@@ -52,6 +54,16 @@ parseNoticeSwitch =
     <> short 'n'
     <> help "Send message as /notice"
     )
+
+data IRCCatOpts = IRCCatOpts {
+    irccatTarget :: Maybe IRCTarget
+  , irccatNotice :: Bool
+  } deriving (Eq, Show, Ord)
+
+parseIRCCatOptions :: Parser IRCCatOpts
+parseIRCCatOptions = IRCCatOpts
+  <$> optional parseTarget
+  <*> parseNoticeSwitch
 
 data TailOpts = TailOpts {
     tailTarget     :: Maybe IRCTarget

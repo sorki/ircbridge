@@ -1,0 +1,27 @@
+name:                ircbridge-tests
+version:             0.1.0.0
+synopsis:            IRC bridge testign utilities and arbitrary instances
+homepage:            https://github.com/sorki/ircbridge
+license:             BSD3
+author:              Richard Marko
+maintainer:          srk@48.io
+copyright:           2020 Richard Marko
+category:            Networking
+build-type:          Simple
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  ghc-options:         -Wall -Wunused-packages -Werror
+  exposed-modules:     Network.IRC.Bridge.Arbitrary
+                     , Test.Hspec.Roundtrip
+  build-depends:       base >= 4.7 && < 5
+                     , ircbridge-types
+                     , hspec
+                     , QuickCheck
+                     , quickcheck-instances
+  default-language:    Haskell2010
+
+source-repository head
+  type:     git
+  location: https://github.com/sorki/ircbridge

@@ -16,6 +16,7 @@ let
     "ircbridge-ircbot-zre"
     "ircbridge-optparse"
     "ircbridge-pretty"
+    "ircbridge-tests"
     "ircbridge-zre"
     "ircbridge-zre-util"
   ];

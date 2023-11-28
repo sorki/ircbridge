@@ -13,6 +13,7 @@ packages:
   ./ircbridge-ircbot-zre/*.cabal
   ./ircbridge-optparse/*.cabal
   ./ircbridge-pretty/*.cabal
+  ./ircbridge-tests/*.cabal
   ./ircbridge-zre/*.cabal
   ./ircbridge-zre-util/*.cabal
 

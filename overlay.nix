@@ -26,6 +26,8 @@ pkgs: hself: hsuper: {
     hself.callCabal2nix "ircbridge-optparse"    ./ircbridge-optparse     {};
   ircbridge-pretty =
     hself.callCabal2nix "ircbridge-pretty"      ./ircbridge-pretty       {};
+  ircbridge-tests =
+    hself.callCabal2nix "ircbridge-tests"       ./ircbridge-tests        {};
   ircbridge-zre =
     hself.callCabal2nix "ircbridge-zre"         ./ircbridge-zre          {};
   ircbridge-zre-util =

@@ -4,17 +4,18 @@ module Main where
 
 import Control.Monad.IO.Class (liftIO)
 
-import Network.IRC.Bridge.Options
-import Network.IRC.Bridge.Serialize
-import Network.IRC.Bridge.Types
+import Network.IRC.Bridge.Options (CatOpts(..), parseCatOptions)
+import Network.IRC.Bridge.Serialize (encodeIRCOutput)
+import Network.IRC.Bridge.Types (mkIRCOutput)
+import Network.ZRE (Group)
 
-import Network.ZRE
+import qualified Network.ZRE
 
 g :: Group
-g = mkGroup "ircInput"
+g = Network.ZRE.mkGroup "ircInput"
 
 main :: IO ()
-main = runZreParse parseCatOptions $ \CatOpts{..} -> do
-  zjoin g
+main = Network.ZRE.runZreParse parseCatOptions $ \CatOpts{..} -> do
+  Network.ZRE.zjoin g
   liftIO (mkIRCOutput catTarget catBody catNotice)
-  >>= zshout g . encodeIRCOutput
+  >>= Network.ZRE.zshout g . encodeIRCOutput

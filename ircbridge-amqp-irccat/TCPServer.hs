@@ -2,6 +2,7 @@
 {-# LANGUAGE RecordWildCards #-}
 module Main where
 
+import Network.IRC.Bridge.Options (IRCCatServerOpts(..))
 import Options.Applicative (execParser, helper, header, info, fullDesc, (<**>))
 
 import qualified Control.Monad
@@ -11,10 +12,9 @@ import qualified Data.Text.IO
 import qualified Data.Time.Clock
 import qualified Network.Run.TCP
 import qualified Network.Socket.ByteString
-
-import Network.IRC.Bridge.Options (IRCCatServerOpts(..), parseIRCCatServerOptions)
 import qualified Network.IRC.Bridge.AMQP
 import qualified Network.IRC.Bridge.IRCCat
+import qualified Network.IRC.Bridge.Options
 import qualified Network.IRC.Bridge.Pretty
 
 main :: IO ()
@@ -55,7 +55,9 @@ main = do
 
     opts =
       info
-        (parseIRCCatServerOptions <**> helper)
+        (    Network.IRC.Bridge.Options.parseIRCCatServerOptions
+        <**> helper
+        )
         (  fullDesc
         <> header "ircbridge-amqp-irccat-tcpserver - send a message to IRC over AMQP, piped into TCP server a la irccat"
         )

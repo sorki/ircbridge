@@ -13,7 +13,7 @@ module Network.IRC.Bridge.Types (
 import Data.Text (Text)
 import Data.Time.Clock (UTCTime)
 import Data.Typeable (Typeable)
-import GHC.Generics
+import GHC.Generics (Generic)
 
 import qualified Data.Text
 import qualified Data.Time.Clock

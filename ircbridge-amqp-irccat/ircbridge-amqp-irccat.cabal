@@ -29,7 +29,7 @@ executable ircbridge-amqp-irccat
                      , ircbridge-amqp
                      , ircbridge-amqp-irccat
                      , ircbridge-optparse
-                     , ircbridge-types
+                     , ircbridge-pretty
                      , optparse-applicative
                      , text
                      , time

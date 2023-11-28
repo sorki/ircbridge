@@ -1,20 +1,20 @@
 {-# LANGUAGE RecordWildCards #-}
 module Main where
 
-import Control.Concurrent.STM
-import Network.IRC.Bridge.AMQP
-import Network.IRC.Bridge.Options
-import Network.IRC.Bridge.Pretty
-import Network.IRC.Bridge.Types
-import Options.Applicative
+import Network.IRC.Bridge.Options (TailOpts(..), parseTailOptions)
+import Network.IRC.Bridge.Pretty (OutputMode(..), renderInputMode)
+import Network.IRC.Bridge.Types (IRCInput(inputFrom))
+import Options.Applicative (execParser, helper, header, info, fullDesc, (<**>))
 
+import qualified Control.Concurrent.STM
 import qualified Control.Monad
 import qualified Data.Maybe
 import qualified Data.Text.IO
+import qualified Network.IRC.Bridge.AMQP
 
 run :: TailOpts -> IO ()
 run TailOpts{..} = do
-  ircIn <- amqpRunTail
+  ircIn <- Network.IRC.Bridge.AMQP.amqpRunTail
   let display =
         Data.Text.IO.putStrLn
         . renderInputMode
@@ -23,7 +23,9 @@ run TailOpts{..} = do
               tailOutputMode)
 
       act = do
-        msg <- atomically $ readTChan ircIn
+        msg <-
+            Control.Concurrent.STM.atomically
+          $ Control.Concurrent.STM.readTChan ircIn
         case tailTarget of
           Nothing -> display msg
           Just t | t == inputFrom msg -> display msg

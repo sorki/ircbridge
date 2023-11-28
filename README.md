@@ -75,6 +75,11 @@ code without pulling in dependencies not required for certain frontends/backends
 For example, `amqp` doesn't require `zre/zeromq`, nor `cereal` dependencies and
 `zre` doesn't require `amqp`, but uses `cereal` for serialization.
 
+The separation of concerns is also quite nice, for example `ircbridge-ircbot-*` subpackages
+use their own set of command line arguments related to IRC network, user information, channels
+to join while clients like `ircbridge-amqp-cat` only need to know about a target where to
+send messages (channel or user).
+
 ## Related projects
 
 - [ircbot](https://github.com/stepcut/ircbot/) used as an IRC frontend

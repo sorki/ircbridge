@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
-module Network.IRC.Bridge.Options 
+module Network.IRC.Bridge.Options
   ( parseTarget
   , CatOpts(..)
   , parseCatOptions

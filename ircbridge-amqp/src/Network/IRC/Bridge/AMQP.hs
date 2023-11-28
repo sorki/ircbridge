@@ -8,11 +8,11 @@ module Network.IRC.Bridge.AMQP (
   , amqpRunTailWith
   , defaultAMQPConfig
   , AMQPConfig(..)
-  , publishIRCOutputWith
-  , publishIRCOutput
+  , publishIRCOutputsWith
+  , publishIRCOutputs
   ) where
 
-import Control.Monad (forever, void)
+import Control.Monad (forever, forM_, void)
 import Control.Concurrent (forkIO, threadDelay)
 import Control.Concurrent.STM
 import Control.Monad.IO.Class (liftIO)
@@ -172,13 +172,13 @@ amqpTailCallback chan (msg, env) = do
         ++ show msg
 
 -- | Connect to AMQP and send a single IRC message
-publishIRCOutput :: IRCOutput -> IO ()
-publishIRCOutput = publishIRCOutputWith defaultAMQPConfig
+publishIRCOutputs :: [IRCOutput] -> IO ()
+publishIRCOutputs = publishIRCOutputsWith defaultAMQPConfig
 
 -- | Connect to AMQP and send a single IRC message
 -- Accepts `AMQPConfig`.
-publishIRCOutputWith :: AMQPConfig -> IRCOutput -> IO ()
-publishIRCOutputWith AMQPConfig{..} ircOutput = do
+publishIRCOutputsWith :: AMQPConfig -> [IRCOutput] -> IO ()
+publishIRCOutputsWith AMQPConfig{..} ircOutputs = do
   conn <- openConnection cfgHostName cfgVirtualHost cfgLoginName cfgLoginPass
 
   chan <- openChannel conn
@@ -192,10 +192,11 @@ publishIRCOutputWith AMQPConfig{..} ircOutput = do
 
   bindQueue chan qf cfgExchangeName cfgRoutingKey
 
-  _mi <- publishMsg
-    chan
-    cfgExchangeName
-    cfgRoutingKey
-    (amqpEncodeIRCOutput ircOutput)
+  forM_ ircOutputs $ \ircOutput ->
+    publishMsg
+      chan
+      cfgExchangeName
+      cfgRoutingKey
+      (amqpEncodeIRCOutput ircOutput)
 
   closeConnection conn

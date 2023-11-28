@@ -11,7 +11,7 @@ import Network.IRC.Bridge.AMQP
 main :: IO ()
 main = execParser opts >>= \CatOpts{..} -> do
   msg <- mkIRCOutput catTarget catBody catNotice
-  publishIRCOutput msg
+  publishIRCOutputs (pure msg)
   where
     opts =
       info

@@ -23,7 +23,7 @@ ircbridge-amqp-cat --user "@srk" Hi
 
 ## Receiving messages from IRC
 
-Use `ircbridge-amqp-tail` to print messages received by a bot:
+Use `ircbridge-amqp-tail` to print messages received by the bot.
 
 ## IRCCat compatible
 
@@ -74,7 +74,7 @@ ircbridge-amqp-irccat-tcpserver --chan "#bottest"
 
 Now you can send messages using e.g. `netcat`:
 
-```
+```sh
 echo "Ahoy" | nc localhost 12345
 echo "@user Hey" | nc localhost 12345
 echo "#anotherChannel Non-default chan" | nc localhost 12345
@@ -97,7 +97,7 @@ Dump messages received from IRC over ZRE:
 
 or using `zrecat`
 
-```
+```sh
 zrecat ircInput
 # another terminal
 zrecat ircOutput
@@ -110,13 +110,13 @@ to inspect the wire format of the AMQP transport:
 
 Show messages received from IRC
 
-```
+```sh
 konsum -x ircExchange -r irc.amqp
 ```
 
 or snoop messages sent to IRC sent by other clients
 
-```
+```sh
 konsum -x ircExchange -r amqp.irc
 ```
 

@@ -19,8 +19,11 @@ import qualified Network.IRC.Bridge.Pretty
 
 main :: IO ()
 main = do
-  sopts <- execParser opts
-  Network.Run.TCP.runTCPServer (Just "localhost") "33000" (loop sopts)
+  sopts@IRCCatServerOpts{..} <- execParser opts
+  Network.Run.TCP.runTCPServer
+    (Just irccatServerHost)
+    irccatServerPort
+    (loop sopts)
   where
     loop sopts@IRCCatServerOpts{..} sock = do
         sockMsg <- Network.Socket.ByteString.recv sock 1024

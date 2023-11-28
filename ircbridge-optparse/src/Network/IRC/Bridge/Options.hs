@@ -71,12 +71,34 @@ parseIRCCatOptions = IRCCatOpts
 data IRCCatServerOpts = IRCCatServerOpts {
     irccatServerTarget :: IRCTarget
   , irccatServerNotice :: Bool
+  , irccatServerHost :: String
+  , irccatServerPort :: String
   } deriving (Eq, Show, Ord)
 
 parseIRCCatServerOptions :: Parser IRCCatServerOpts
 parseIRCCatServerOptions = IRCCatServerOpts
   <$> parseTarget
   <*> parseNoticeSwitch
+  <*> parseHost
+  <*> parsePort
+
+parseHost :: Parser String
+parseHost =
+  strOption
+    (  long "host"
+    <> help "Host to listen for connections"
+    <> showDefault
+    <> value "localhost"
+    )
+
+parsePort :: Parser String
+parsePort =
+  strOption
+    (  long "port"
+    <> help "Port to listen for connections"
+    <> showDefault
+    <> value "12345"
+    )
 
 data TailOpts = TailOpts {
     tailTarget     :: Maybe IRCTarget

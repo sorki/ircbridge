@@ -43,8 +43,13 @@ executable ircbridge-amqp-irccat-tcpserver
                      , ircbridge-amqp
                      , ircbridge-amqp-irccat
                      , ircbridge-optparse
-                     , ircbridge-types
+                     , ircbridge-pretty
+                     , bytestring
                      , optparse-applicative
+                     , text
+                     , time
+                     , network
+                     , network-run
   default-language:    Haskell2010
 
 test-suite samples

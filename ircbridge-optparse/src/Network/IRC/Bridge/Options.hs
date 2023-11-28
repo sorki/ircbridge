@@ -6,6 +6,8 @@ module Network.IRC.Bridge.Options
   , parseCatOptions
   , IRCCatOpts(..)
   , parseIRCCatOptions
+  , IRCCatServerOpts(..)
+  , parseIRCCatServerOptions
   , TailOpts(..)
   , parseTailOptions
   , parseOutputMode
@@ -63,6 +65,17 @@ data IRCCatOpts = IRCCatOpts {
 parseIRCCatOptions :: Parser IRCCatOpts
 parseIRCCatOptions = IRCCatOpts
   <$> optional parseTarget
+  <*> parseNoticeSwitch
+
+-- | Like @IRCCatOpts@ but default target is required
+data IRCCatServerOpts = IRCCatServerOpts {
+    irccatServerTarget :: IRCTarget
+  , irccatServerNotice :: Bool
+  } deriving (Eq, Show, Ord)
+
+parseIRCCatServerOptions :: Parser IRCCatServerOpts
+parseIRCCatServerOptions = IRCCatServerOpts
+  <$> parseTarget
   <*> parseNoticeSwitch
 
 data TailOpts = TailOpts {

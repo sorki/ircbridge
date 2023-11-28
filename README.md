@@ -25,8 +25,60 @@ ircbridge-amqp-cat --user "@srk" Hi
 
 Use `ircbridge-amqp-tail` to print messages received by a bot:
 
+## IRCCat compatible
+
+`ircbridge-amqp-irccat` offers
+[irccat](https://github.com/irccloud/irccat) compatible layer.
+
+### `ircbridge-amqp-irccat`
+
+allows to pipe target(s) and message to its stdin, for example:
+
 ```sh
-ircbridge-amqp-tail
+echo "#bottest Helo" | ircbridge-amqp-irccat
+echo "@user Hi" | ircbridge-amqp-irccat
+```
+
+Multiple targets are also supported
+
+```sh
+echo "#bottest,@user,#chan2 Hi all" | ircbridge-amqp-irccat
+```
+
+It is also possible to pass the default target via `--chan` or `--user`
+arugments:
+
+```sh
+echo "Send to default target" | ircbridge-amqp-irccat --chan "#bottest"
+```
+
+To send message as a notice, use `--notice` flag
+
+```sh
+echo "#bottest Helo" | ircbridge-amqp-irccat --notice
+```
+
+The topic operations are not supported.
+
+### `ircbridge-amqp-irccat-tcpserver`
+
+Similar to `ircbridge-amqp-irccat` but running as a TCP server
+on localhost and port `12345` (defaults, can be overriden using
+`--host` and `--port`).
+
+For `-tcpserver`, the default target must be supplied beforehand:
+
+```sh
+ircbridge-amqp-irccat-tcpserver --chan "#bottest"
+```
+
+Now you can send messages using e.g. `netcat`:
+
+```
+echo "Ahoy" | nc localhost 12345
+echo "@user Hey" | nc localhost 12345
+echo "#anotherChannel Non-default chan" | nc localhost 12345
+echo "#chan,@user Mutliple recepients" | nc localhost 12345
 ```
 
 ### ZRE backend

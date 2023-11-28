@@ -43,11 +43,15 @@ parseCatOptions = CatOpts
         (  metavar "BODY"
         <> help "Message body"
         )
-  <*> switch
-        (  long "notice"
-        <> short 'n'
-        <> help "Send message as /notice"
-        )
+  <*> parseNoticeSwitch
+
+parseNoticeSwitch :: Parser Bool
+parseNoticeSwitch =
+  switch
+    (  long "notice"
+    <> short 'n'
+    <> help "Send message as /notice"
+    )
 
 data TailOpts = TailOpts {
     tailTarget     :: Maybe IRCTarget

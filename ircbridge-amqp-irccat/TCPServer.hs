@@ -20,6 +20,9 @@ import qualified Network.IRC.Bridge.Pretty
 main :: IO ()
 main = do
   sopts@IRCCatServerOpts{..} <- execParser opts
+  Data.Text.IO.putStrLn
+    $ "Listening on port " <> (Data.Text.pack irccatServerPort)
+
   Network.Run.TCP.runTCPServer
     (Just irccatServerHost)
     irccatServerPort

@@ -18,8 +18,10 @@ import Control.Concurrent.STM
 import Control.Monad.IO.Class (liftIO)
 import qualified Control.Exception as X
 import Data.Text (Text)
+import qualified Data.Map
 
 import Network.AMQP
+import Network.AMQP.Types (FieldTable(..), FieldValue(FVInt64))
 import Network.IRC.Bridge.Types
 import Network.IRC.Bridge.AMQP.Serialize
 
@@ -48,6 +50,20 @@ defaultAMQPConfig = AMQPConfig {
   , cfgRoutingKeyFrom  = "irc.amqp"
   }
 
+defaultQueueHeaders :: FieldTable
+defaultQueueHeaders = FieldTable $ Data.Map.fromList
+
+  [ ("x-expires", FVInt64 $ minutes 30) -- expire queue after 30 minutes when unused
+  , ("x-message-ttl", FVInt64 $ hours 36) -- 36 hours message TTL
+  , ("x-max-length-bytes", FVInt64 $ mbytes 42) -- store maximum 42 MBytes
+  ]
+  where
+    seconds = (*1000)
+    minutes = (*60) . seconds
+    hours = (*60) . minutes
+    kbytes = (*1024)
+    mbytes = (*1024) . kbytes
+
 -- | Connect to AMQP and forward messages from and to IRC
 amqpRun :: IO ( TChan IRCOutput
               , TChan IRCInput)
@@ -66,6 +82,7 @@ amqpRunWith AMQPConfig{..} = do
   chan <- openChannel conn
   (q, _, _) <- declareQueue chan newQueue {
       queueName = cfgQueueName
+    , queueHeaders = defaultQueueHeaders
     }
   declareExchange chan newExchange {
       exchangeName = cfgExchangeName
@@ -82,6 +99,7 @@ amqpRunWith AMQPConfig{..} = do
   chanFrom <- openChannel conn
   (qf, _, _) <- declareQueue chanFrom newQueue {
       queueName = cfgQueueName
+    , queueHeaders = defaultQueueHeaders
     }
   declareExchange chanFrom newExchange {
       exchangeName = cfgExchangeName
@@ -136,6 +154,7 @@ amqpRunTailWith AMQPConfig{..} = do
   chan <- openChannel conn
   (q, _, _) <- declareQueue chan newQueue {
       queueName = cfgQueueName
+    , queueHeaders = defaultQueueHeaders
     }
   declareExchange chan newExchange {
       exchangeName = cfgExchangeName
@@ -184,6 +203,7 @@ publishIRCOutputsWith AMQPConfig{..} ircOutputs = do
   chan <- openChannel conn
   (qf, _, _) <- declareQueue chan newQueue {
       queueName = cfgQueueName
+    , queueHeaders = defaultQueueHeaders
     }
   declareExchange chan newExchange {
       exchangeName = cfgExchangeName
